@@ -1,30 +1,27 @@
-use std::fs;
 use std::collections::HashSet;
 
+const PUZZLE: &str = include_str!("../input");
+
 fn main() {
-    let file_content = fs::read_to_string("input").unwrap();
+    let frequency : i32 = PUZZLE.lines()
+        .map(parse_freq_change)
+        .sum();
 
-    let mut frequency = 0;
-
-    file_content.lines()
-        .for_each(|change| {
-            let change = parse_freq_change(change);
-            frequency += change;
-        });
-
+    // For my input : 459
     println!("Frequency is {}", frequency);
 
-    let dupe = find_first_dupe_freq(file_content);
+    let dupe = find_first_dupe_freq();
+    // For my input : 65474
     println!("First duplicated frequency is {}", dupe)
 }
 
-fn find_first_dupe_freq(file_content: String) -> i32 {
+fn find_first_dupe_freq() -> i32 {
     let mut set = HashSet::new();
     let mut frequency = 0;
     set.insert(0);
 
     loop {
-        for change in file_content.lines() {
+        for change in PUZZLE.lines() {
             let change = parse_freq_change(change);
             frequency += change;
 
