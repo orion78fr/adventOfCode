@@ -4,4 +4,4 @@ version = "0.1.0"
 authors = ["OriOn78fr"]
 
 [dependencies]
-itertools = "0.7.11"
+itertools = "0.7"

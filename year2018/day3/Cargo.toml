@@ -2,3 +2,6 @@
 name = "advent_of_code_year_2018_day_3"
 version = "0.1.0"
 authors = ["OriOn78fr"]
+
+[dependencies]
+itertools = "0.7"
