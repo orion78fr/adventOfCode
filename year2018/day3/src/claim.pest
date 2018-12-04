@@ -1,0 +1,2 @@
+line = {SOI ~ "#" ~ number ~ " @ " ~ number ~ "," ~ number ~ ": " ~ number ~ "x" ~ number ~ EOI}
+number = { (ASCII_DIGIT)+ }

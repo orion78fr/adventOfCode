@@ -1,9 +1,17 @@
 extern crate itertools;
+extern crate pest;
+#[macro_use]
+extern crate pest_derive;
 
 use std::collections::hash_map::Entry;
 use std::collections::HashMap;
 
 use itertools::Itertools;
+use pest::Parser;
+
+#[derive(Parser)]
+#[grammar = "claim.pest"]
+pub struct ClaimParser;
 
 const PUZZLE: &str = include_str!("../input");
 
@@ -53,26 +61,21 @@ fn main() {
 }
 
 fn decode_claim(claim: &str) -> Claim {
-    // "#1 @ 257,829: 10x23"
-    let mut splits = claim.split(&['#', ' ', '@', ',', ':', 'x'][..]);
+    let parsed_claim = ClaimParser::parse(Rule::line, claim).unwrap().next().unwrap();
 
-    splits.next();
-    let id = splits.next().unwrap().parse().unwrap();
-
-    splits.next();
-    splits.next();
-    let x = splits.next().unwrap().parse().unwrap();
-    let y = splits.next().unwrap().parse().unwrap();
-
-    splits.next();
-    let w = splits.next().unwrap().parse().unwrap();
-    let h = splits.next().unwrap().parse().unwrap();
+    let numbers: Vec<i32> = parsed_claim.into_inner()
+        .filter(|x| match x.as_rule() {
+            Rule::number => true,
+            _ => false
+        })
+        .map(|num| num.into_span().as_str().parse().unwrap())
+        .collect();
 
     Claim {
-        id,
-        x,
-        y,
-        w,
-        h,
+        id: numbers[0],
+        x: numbers[1],
+        y: numbers[2],
+        w: numbers[3],
+        h: numbers[4]
     }
 }
