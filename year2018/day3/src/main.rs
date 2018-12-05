@@ -65,8 +65,8 @@ fn decode_claim(claim: &str) -> Claim {
 
     let numbers: Vec<i32> = parsed_claim.into_inner()
         .filter(|x| match x.as_rule() {
-            Rule::number => true,
-            _ => false
+            Rule::EOI => false,
+            _ => true
         })
         .map(|num| num.into_span().as_str().parse().unwrap())
         .collect();

@@ -1,0 +1,18 @@
+// [1518-11-22 00:00] Guard #1231 begins shift
+// [1518-09-09 00:02] falls asleep
+// [1518-04-06 00:58] wakes up
+
+schedule = { SOI ~ "[" ~ date ~ "] " ~ action ~ EOI }
+
+date = { year ~ "-" ~ month ~ "-" ~ day ~ " " ~ hour ~ ":" ~ minute }
+year = { (ASCII_DIGIT)+ }
+month = { (ASCII_DIGIT)+ }
+day = { (ASCII_DIGIT)+ }
+hour = { (ASCII_DIGIT)+ }
+minute = { (ASCII_DIGIT)+ }
+
+action = { shift | sleep | wakes }
+shift = { "Guard #" ~ guard_num ~ " begins shift" }
+guard_num = { (ASCII_DIGIT)+ }
+sleep = @{"falls asleep"}
+wakes = @{"wakes up"}
