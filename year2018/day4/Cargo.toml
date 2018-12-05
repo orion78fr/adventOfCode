@@ -4,6 +4,5 @@ version = "0.1.0"
 authors = ["OriOn78fr"]
 
 [dependencies]
-itertools = "0.7"
 pest = "2.0"
 pest_derive = "2.0"
