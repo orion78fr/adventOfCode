@@ -82,7 +82,19 @@ fn main() {
         .max_by(|(_, v), (_, v2)| v.cmp(v2))
         .unwrap();
 
+    // For my input : 131469
     println!("{}", *id as i64 * *most_sleeped_minute as i64);
+
+    let (id, minute, _) = guard_schedules.iter()
+        .flat_map(|(&k, v)| {
+            v.iter()
+                .map(move |(k2, v2)| (k, k2.clone(), v2.clone()))
+        })
+        .max_by(|(_, _, cnt), (_, _, cnt2)| cnt.cmp(cnt2))
+        .unwrap();
+
+    // For my input : 96951
+    println!("{}", id as i64 * minute as i64)
 }
 
 fn parse_schedule(schedule: Pair<Rule>) -> Event {

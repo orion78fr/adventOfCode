@@ -57,6 +57,7 @@ fn main() {
     let non_overlapping = non_overlapping_claims.iter()
         .find(|(_, state)| **state).unwrap().0;
 
+    // For my input : 243
     println!("Non overlapping claim : {}", non_overlapping);
 }
 
