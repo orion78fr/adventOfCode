@@ -1,0 +1,2 @@
+dependency = { SOI ~ "Step " ~ step ~ " must be finished before step " ~ step ~ " can begin." ~ EOI }
+step = { ASCII_ALPHA_UPPER }
