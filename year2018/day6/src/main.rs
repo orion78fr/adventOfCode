@@ -7,18 +7,32 @@ use itertools::Itertools;
 
 const PUZZLE: &str = include_str!("../input");
 
+#[derive(Eq, PartialEq, Hash, Debug)]
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+impl Point {
+    fn manhattan_distance(&self, pt: &Point) -> i32 {
+        (self.x - pt.x).abs() + (self.y - pt.y).abs()
+    }
+}
+
 fn main() {
-    let points: Vec<(i32, i32)> = PUZZLE.lines()
+    let points: Vec<_> = PUZZLE.lines()
         .map(|line| {
             let mut coords = line.split(',');
-            (coords.next().unwrap().parse().unwrap(),
-             coords.next().unwrap().trim().parse().unwrap())
+            Point {
+                x: coords.next().unwrap().parse().unwrap(),
+                y: coords.next().unwrap().trim().parse().unwrap(),
+            }
         })
         .collect();
 
     let (xmin, xmax, ymin, ymax) = points.iter()
         .fold((std::i32::MAX, std::i32::MIN, std::i32::MAX, std::i32::MIN),
-              |(xmin, xmax, ymin, ymax), (x, y)| {
+              |(xmin, xmax, ymin, ymax), Point { x, y }| {
                   (
                       if x.lt(&xmin) { *x } else { xmin },
                       if x.gt(&xmax) { *x } else { xmax },
@@ -28,28 +42,29 @@ fn main() {
               });
 
     let map: HashMap<_, _> = (xmin..xmax).cartesian_product(ymin..ymax)
-        .map(|(x, y)| ((x, y), closest_point(&points, (x, y))))
+        .map(|(x, y)| (Point { x, y }, closest_point(&points, Point { x, y })))
         .collect();
 
     let infinite_claims: HashSet<_> = map.iter()
-        .filter(|((x, y), _)| *x == xmin || *x == xmax || *y == ymin || *y == ymax)
+        .filter(|(Point { x, y }, _)| { *x == xmin || *x == xmax || *y == ymin || *y == ymax })
         .map(|(_, pt)| pt)
         .collect();
 
-    println!("{:#?}", infinite_claims)
+    let res = points.iter()
+        .filter(|pt| !infinite_claims.contains(pt))
+        .map(|pt| map.iter().filter(|(_, p)| ***p == *pt).count())
+        .max()
+        .unwrap();
 
-    //println!("{} {} {} {}", xmin, xmax, ymin, ymax);
+    // For my input : 5187
+    println!("{}", res)
 }
 
-fn closest_point(points: &Vec<(i32, i32)>, point: (i32, i32)) -> (i32, i32) {
-    *points.iter()
-        .min_by(|&&point1, &&point2| {
-            manhattan_distance(point1, point)
-                .cmp(&manhattan_distance(point2, point))
+fn closest_point(points: &Vec<Point>, point: Point) -> &Point {
+    points.iter()
+        .min_by(|point1, point2| {
+            point1.manhattan_distance(&point)
+                .cmp(&point2.manhattan_distance(&point))
         })
         .unwrap()
-}
-
-fn manhattan_distance(pt1: (i32, i32), pt2: (i32, i32)) -> i32 {
-    (pt1.0 - pt2.0).abs() + (pt1.1 - pt2.1).abs()
 }
