@@ -57,7 +57,18 @@ fn main() {
         .unwrap();
 
     // For my input : 5187
-    println!("{}", res)
+    println!("{}", res);
+
+    let safe_points = (xmin..xmax).cartesian_product(ymin..ymax)
+        .filter(|(x, y)| {
+            points.iter()
+                .map(|pt| Point { x:*x, y:*y }.manhattan_distance(pt))
+                .sum::<i32>() < 10000
+        })
+        .count();
+
+    // For my input : 34829
+    println!("{}", safe_points);
 }
 
 fn closest_point(points: &Vec<Point>, point: Point) -> &Point {
