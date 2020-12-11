@@ -39,12 +39,12 @@ fn main() {
         }
     }
 
-    // For my input : GRTAHKLQVYWXMUBCZPIJFEDNSO
     res+= &(b'A'..b'Z' + 1)
         .map(|c| c as char)
         .map(|c| c.to_string())
         .find(|c| !res.contains(c))
         .unwrap();
 
+    // For my input : GRTAHKLQVYWXMUBCZPIJFEDNSO
     println!("{}", res);
 }

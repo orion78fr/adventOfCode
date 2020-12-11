@@ -19,8 +19,6 @@ public class Main {
         }
 
         System.out.println("" + (Math.abs(x) + Math.abs(y)));
-
-
     }
 
     private static void increment(int increment) {
